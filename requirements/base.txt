@@ -1,0 +1,17 @@
+###### Requirements without Version Specifiers ######
+matplotlib
+sklearn
+joblib
+seaborn
+GitPython
+pyod
+jinja2
+picamera
+
+###### Requirements with Version Specifiers ######
+fbs[sentry] == 0.8.3
+PyInstaller == 3.4
+keras == 2.2.*
+imageio == 2.*
+scikit-image == 0.*
+opencv-contrib-python == 4.1.0.25
