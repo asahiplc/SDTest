@@ -122,7 +122,7 @@ class InspectionWidget(QWidget):
             move(image_path, inspected_image_dir_path + '/OK_' + image_name.replace('.',  '.' + w_score, 1))
             self.ui.ok_score.setText(w_score)
             self.ok_counter += 1
-            self.serving_dobot.sending_inspection_result(self, 1)
+            self.serving_dobot.sending_inspection_result(self, 1, image_path)
         else:
             ng_image = QPixmap(str(image_path))
             self.ui.ng_image.setPixmap(ng_image.scaled(self.ui.ng_image.size()))
@@ -131,7 +131,7 @@ class InspectionWidget(QWidget):
                                      prediction)
             move(image_path, inspected_image_dir_path + '/NG_' + image_name.replace('.',  '.' + w_score, 1))
             self.ng_counter += 1
-            self.serving_dobot.sending_inspection_result(self, 0)
+            self.serving_dobot.sending_inspection_result(self, 0, image_path)
         self.ui.inspect_button.setDisabled(False)
         self.ui.inspect_existing_image_button.setDisabled(False)
 
@@ -147,19 +147,19 @@ class InspectionWidget(QWidget):
 
     def on_get_img_from_camera(self):
         print('on_get_img_from_camera')
-        gazo_list = glob.glob('/home/pi/kensa_gazo*')
+        gazo_list = glob.glob('/home/pi/gazo*')
         original_image_path = gazo_list[0]
-        time.sleep(1)
+        time.sleep(0.5)
         print('original_image_path = ' + original_image_path)
         Project.save_latest_inspection_image_path(os.path.dirname(original_image_path))
         if original_image_path:
             _, ext = os.path.splitext(original_image_path)
             # TODO: manage image name format (e.x. use Dataset.generate_image_path())
-            pathword = original_image_path.replace('/home/pi/', '')
-            pathword = pathword[0:pathword.find('_', 11)+1]
+            pathword = original_image_path.replace('/home/pi/', '').replace('.bmp', '')
+#            pathword = pathword[0:pathword.rfind('_', 6)+1]
             print('pathword = ' + pathword)
             timestamp = str(datetime.now().isoformat()).replace(':', '-')
-            file_name = f'{pathword}{timestamp}.{ext}'
+            file_name = f'{pathword}_{timestamp}{ext}'
             copied_image_path = Project.project_path() + '/tmp/' + file_name
             copy2(original_image_path, copied_image_path)
             path = self.learning_model.start_predict([copied_image_path])
