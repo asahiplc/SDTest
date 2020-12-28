@@ -49,7 +49,6 @@ class Dataset:
 
     @classmethod
     def trim_image(cls, path: Path, save_path: Path) -> Path:
-        print('path = ' + path)
         try:
             img = imageio.imread(path)
         except:

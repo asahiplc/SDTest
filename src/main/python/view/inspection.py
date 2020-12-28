@@ -149,7 +149,7 @@ class InspectionWidget(QWidget):
         print('on_get_img_from_camera')
         gazo_list = glob.glob('/home/pi/gazo*')
         original_image_path = gazo_list[0]
-        time.sleep(0.5)
+#        time.sleep(0.5)
         print('original_image_path = ' + original_image_path)
         Project.save_latest_inspection_image_path(os.path.dirname(original_image_path))
         if original_image_path:
@@ -161,13 +161,16 @@ class InspectionWidget(QWidget):
             timestamp = str(datetime.now().isoformat()).replace(':', '-')
             file_name = f'{pathword}_{timestamp}{ext}'
             copied_image_path = Project.project_path() + '/tmp/' + file_name
-            copy2(original_image_path, copied_image_path)
-            path = self.learning_model.start_predict([copied_image_path])
-            if path:
-                self.alert_for_truncated_image(original_image_path)
-                return
+            path = 'Dummy'
+            while path:
+                copy2(original_image_path, copied_image_path)
+                path = self.learning_model.start_predict([copied_image_path])
+#            if path:
+#                self.alert_for_truncated_image(original_image_path)
+#                return
             self.ui.inspect_button.setDisabled(True)
             self.ui.inspect_existing_image_button.setDisabled(True)
+            print('on_get_img_from_camera end')
 
     def on_clicked_inspection_existing_image_button(self):
         print('on_clicked_inspection_existing_image_button')
@@ -185,9 +188,9 @@ class InspectionWidget(QWidget):
             copied_image_path = Project.project_path() + '/tmp/' + file_name
             copy2(original_image_path, copied_image_path)
             path = self.learning_model.start_predict([copied_image_path])
-            if path:
-                self.alert_for_truncated_image(original_image_path)
-                return
+#            if path:
+#                self.alert_for_truncated_image(original_image_path)
+#                return
             self.ui.inspect_button.setDisabled(True)
             self.ui.inspect_existing_image_button.setDisabled(True)
 

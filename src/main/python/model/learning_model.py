@@ -167,9 +167,7 @@ class LearningModel(QObject):
         self.__model.load(LearningModel.__weight_file_path(cam_index=0))
 
     def start_predict(self, image_paths):
-        print('start_predict')
         image_path = image_paths[0]
-        print('image_path = ' + image_path)
         truncated_image_path = Dataset.trim_image(image_path, os.path.dirname(image_path))
         if truncated_image_path:
             return truncated_image_path
