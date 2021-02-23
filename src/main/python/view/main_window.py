@@ -84,6 +84,7 @@ class MainWindow(QMainWindow):
 
         self.on_clicked_inspection_button()
         self.ui.inspection_action.setChecked(True)
+#        is_file = os.path.isfile(Project.project_path() + '/models/saved_model.pb')
         is_file = os.path.isfile(Project.project_path() + '/models/saved_model.tflite')
         if not is_file:
             self.on_clicked_optimization_button()

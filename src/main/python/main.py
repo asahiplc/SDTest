@@ -9,7 +9,6 @@ from fbs_runtime.excepthook.sentry import SentryExceptionHandler
 import os
 import sys
 import multiprocessing
-import RPi.GPIO as GPIO
 
 
 class AppContext(ApplicationContext):           # 1. Subclass ApplicationContext
@@ -71,7 +70,6 @@ class AppContext(ApplicationContext):           # 1. Subclass ApplicationContext
 if __name__ == "__main__":
     multiprocessing.freeze_support()
 
-    GPIO.cleanup()
     appctxt = AppContext()                      # 4. Instantiate the subclass
     exit_code = appctxt.run()                   # 5. Invoke run()
     sys.exit(exit_code)
