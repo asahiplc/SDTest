@@ -6,6 +6,7 @@ import glob
 import time
 import csv
 import subprocess
+from operator import itemgetter
 
 class ServingDobot(QObject):
     __default_instance = None
@@ -105,6 +106,21 @@ class ServingDobot(QObject):
             print(Info_str, CpuRateList)
             w.writerow([image_path, s_time, CpuTempNum, CpuVoltsNum, CpuRate])
             file.close()
+
+            # OLD result image remove
+            DIR = '/home/pi/Seal_inspection_keyencecamera/inspection_results/images'
+            print("Result images = ", sum(os.path.isfile(os.path.join(DIR, name)) for name in os.listdir(DIR)))
+            filelists = []
+            for file in os.listdir(DIR):
+                base, ext = os.path.splitext(file)
+                if ext == '.bmp':
+                    filelists.append([DIR + '/' + file, os.path.getctime(DIR + '/' + file)])
+            filelists.sort(key=itemgetter(1), reverse=True)
+            MAX_CNT = 1000
+            for i,file in enumerate(filelists):
+                if i > MAX_CNT - 1:
+                    print("Remove Result file = ", file[0])
+                    os.remove(file[0])
 
             self.__waiting_dobot_req_thread = threading.Thread(target=self.waiting_dobot_req, daemon=True)
             self.__waiting_dobot_req_thread.start()
